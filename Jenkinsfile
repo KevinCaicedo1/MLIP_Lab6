@@ -4,9 +4,9 @@ pipeline {
     stages {
         stage('Install Conda') {
             steps {
-                sh '''
+                sh '''#!/bin/bash -e
                 echo '🔧 Installing Miniconda...'
-                
+
                 # Definir ruta de instalación
                 CONDA_DIR="$HOME/miniconda3"
                 export PATH="$CONDA_DIR/bin:$PATH"
@@ -22,8 +22,8 @@ pipeline {
                     echo '✅ Miniconda is already installed.'
                 fi
 
-                # Inicializar Conda
-                source "$CONDA_DIR/etc/profile.d/conda.sh"
+                # Inicializar Conda correctamente con bash
+                eval "$($CONDA_DIR/bin/conda shell.bash hook)"
                 conda init bash
                 '''
             }
@@ -31,13 +31,13 @@ pipeline {
 
         stage('Create Virtual Env') {
             steps {
-                sh '''
+                sh '''#!/bin/bash -e
                 echo '🌱 Creating and activating Conda environment...'
-                
+
                 # Ruta de Miniconda
                 CONDA_DIR="$HOME/miniconda3"
                 export PATH="$CONDA_DIR/bin:$PATH"
-                source "$CONDA_DIR/etc/profile.d/conda.sh"
+                eval "$($CONDA_DIR/bin/conda shell.bash hook)"
 
                 # Crear entorno si no existe
                 if ! conda env list | grep -q "test_env"; then
@@ -52,13 +52,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh '''
+                sh '''#!/bin/bash -e
                 echo '📦 Installing pytest...'
-                
+
                 # Ruta de Miniconda
                 CONDA_DIR="$HOME/miniconda3"
                 export PATH="$CONDA_DIR/bin:$PATH"
-                source "$CONDA_DIR/etc/profile.d/conda.sh"
+                eval "$($CONDA_DIR/bin/conda shell.bash hook)"
 
                 # Activar entorno y instalar pytest
                 conda activate test_env
@@ -70,13 +70,13 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh '''
+                sh '''#!/bin/bash -e
                 echo '🧪 Running pytest...'
 
                 # Ruta de Miniconda
                 CONDA_DIR="$HOME/miniconda3"
                 export PATH="$CONDA_DIR/bin:$PATH"
-                source "$CONDA_DIR/etc/profile.d/conda.sh"
+                eval "$($CONDA_DIR/bin/conda shell.bash hook)"
 
                 # Activar entorno y ejecutar pruebas
                 conda run -n test_env --no-capture-output pytest
