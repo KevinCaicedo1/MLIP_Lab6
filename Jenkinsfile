@@ -79,7 +79,12 @@ pipeline {
                 eval "$($CONDA_DIR/bin/conda shell.bash hook)"
 
                 # Activar entorno y ejecutar pruebas
-                conda run -n test_env conda install pandas -y
+                conda run -n test_env conda install pandas -y 
+                # Debo instalar conda create -n mlip python pytest numpy pandas scikit-learn -c conda-forge
+                conda run -n test_env conda install numpy -y
+                conda run -n test_env conda install scikit-learn -y
+                conda run -n test_env conda install -c conda-forge scikit-learn -y
+                
                 conda run -n test_env --no-capture-output pytest
 
                 echo '✅ pytest executed successfully.'
