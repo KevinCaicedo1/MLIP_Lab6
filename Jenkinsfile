@@ -18,12 +18,13 @@ pipeline {
                 # TODO fill out the path to conda here
                 # sudo /PATH/TO/CONDA init
 
-                sudo /opt/conda/bin/conda init bash
-                sudo /opt/conda/bin/conda activate test_env
+                /opt/conda/bin/conda init bash
+                source ~/.bashrc
+                
 
                 # TODO Complete the command to run pytest
                 # sudo /PATH/TO/CONDA run -n <Envinronment Name> <Command you want to run>
-                sudo /opt/conda/bin/conda run -n test_env pytest
+                /opt/conda/bin/conda run -n test_env --no-capture-output pytest
 
                 echo 'pytest not runned'
                 exit 1 #comment this line after implementing Jenkinsfile
