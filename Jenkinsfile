@@ -79,6 +79,7 @@ pipeline {
                 eval "$($CONDA_DIR/bin/conda shell.bash hook)"
 
                 # Activar entorno y ejecutar pruebas
+                conda run -n test_env conda install pandas -y
                 conda run -n test_env --no-capture-output pytest
 
                 echo '✅ pytest executed successfully.'
